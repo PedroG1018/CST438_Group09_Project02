@@ -16,6 +16,7 @@ Deployed using Heroku: https://vast-beach-99467.herokuapp.com
 ### Mockup (not final)
 
 ### Entity Relation Diagram (not final)
+https://lucid.app/lucidchart/ca9cfcba-a0b3-45eb-a2b1-dfd43ef44816/edit?beaconFlowId=3DB69CE89DFC15F2&invitationId=inv_92fc9869-6aa2-434a-b636-67773748482d&page=0_0#
 
 ### Links
 
