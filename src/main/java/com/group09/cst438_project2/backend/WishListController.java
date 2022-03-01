@@ -1,4 +1,4 @@
-package com.group09.cst438_project2;
+package com.group09.cst438_project2.backend;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

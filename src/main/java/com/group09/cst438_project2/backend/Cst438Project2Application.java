@@ -1,4 +1,4 @@
-package com.group09.cst438_project2;
+package com.group09.cst438_project2.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,15 +11,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @SpringBootApplication
 public class Cst438Project2Application {
 
+/*
     @RequestMapping("/")
     @ResponseBody
     String home(@RequestParam(defaultValue = "test") String id) {
+
         if(id.equals("21233")){
             return "AHHHHHHHHHH yeah";
         }
         return "Hello world! param == " + id;
     }
-
+*/
     @RequestMapping(value = "/name")
     @ResponseBody
     String name(){
