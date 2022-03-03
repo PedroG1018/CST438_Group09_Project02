@@ -6,8 +6,11 @@
     <link th:href="@{/static/css/main.css}" rel="stylesheet">
 </head>
 <body>
-<p>
-    Hey there! <th:block th:text="${message}">message</th:block>
-</p>
+    <ul>
+        <th:block th:each="user : ${users}">
+            <li th:utext="${'Name: ' + user.name + 'Username: ' + user.username}" >..</li>
+        </th:block>
+    </ul>
+
 </body>
 </html>
