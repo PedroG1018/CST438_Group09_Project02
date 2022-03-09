@@ -12,6 +12,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer userId;
 
+    private String username;
     private String firstName;
     private String lastName;
     private String password;
@@ -22,8 +23,9 @@ public class User {
 
     }
 
-    public User(Integer userId, String firstName, String lastName, String password, Boolean isAdmin){
+    public User(Integer userId, String username, String firstName, String lastName, String password, Boolean isAdmin){
         this.userId = userId;
+        this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
@@ -36,6 +38,14 @@ public class User {
 
     public void setUserId(Integer id) {
         this.userId = userId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getFirstName() {

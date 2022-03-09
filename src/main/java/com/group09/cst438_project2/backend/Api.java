@@ -16,17 +16,6 @@ public class Api {
         return userRepository.findAll();
     }
 
-    @PostMapping(path = "/addUser")
-    public @ResponseBody String addUser (@RequestParam String firstName, @RequestParam String lastName, @RequestParam String password) {
-        User user = new User();
-
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setPassword(password);
-
-        userRepository.save(user);
-        return "New User A/C has been added!";
-    }
 
 //    @GetMapping(path = "/deleteUser")
 //    public @ResponseBody String deleteUser (@RequestParam String id) {
