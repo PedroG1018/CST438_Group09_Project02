@@ -36,7 +36,7 @@ public class User {
         return userId;
     }
 
-    public void setUserId(Integer id) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
@@ -76,7 +76,7 @@ public class User {
         return isAdmin;
     }
 
-    public void setAdmin(Boolean admin) {
-        isAdmin = admin;
+    public void setAdmin(Boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 }

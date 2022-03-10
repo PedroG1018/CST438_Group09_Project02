@@ -2,13 +2,11 @@ package com.group09.cst438_project2.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@SpringBootApplication
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class })
 public class Cst438Project2Application {
 
 /*
@@ -21,15 +19,16 @@ public class Cst438Project2Application {
         }
         return "Hello world! param == " + id;
     }
-*/
+
     @RequestMapping(value = "/name")
     @ResponseBody
     String name(){
         return "name";
     }
 
+ */
+
     public static void main(String[] args) {
         SpringApplication.run(Cst438Project2Application.class, args);
     }
-
 }
