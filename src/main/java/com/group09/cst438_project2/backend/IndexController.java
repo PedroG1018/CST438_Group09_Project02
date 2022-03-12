@@ -37,11 +37,36 @@ public class IndexController {
             model.addAttribute("usernameTaken", true);
             return "registerUserPage";
         }
+
         // otherwise save user to database
         api.addUser(user.getFirstName(), user.getLastName(), user.getUsername(), user.getPassword());
 
         // return to login
-        return "home";
+        return "redirect:/";
+    }
+
+    // get request for add item page
+    @GetMapping(value="/addItem")
+    public String addItemForm(@RequestParam Integer listId, @RequestParam Integer userId, Model model) {
+        // adding empty item object and id values for thymeleaf to use when submitting post request form
+        // userId and listId already initialized
+        model.addAttribute("item", new Item(userId, listId, "", "", "", ""));
+
+        return "addItemPage";
+    }
+
+    @PostMapping(value="/addItem")
+    public String addItemSubmit(@ModelAttribute Item item, Model model) {
+        // check that item name field is filled out
+        if (item.getItemName() == null || item.getItemName().equals("")) {
+            model.addAttribute("nameFieldEmpty", true);
+            return "addItemPage";
+        }
+        // otherwise save item to the database
+        api.addItem(item.getListId(), item.getUserId(), item.getItemName(), item.getItemURL(), item.getImgURL(), item.getDescription());
+
+        // return to items page
+        return "redirect:items?listId=" + item.getListId() + "&userId=" + item.getUserId();
     }
 
     @GetMapping("/loginPage")
@@ -52,10 +77,5 @@ public class IndexController {
     @GetMapping("/editItemPage")
     public String editItemPage(Model model) {
         return "editItemPage";
-    }
-
-    @GetMapping("/listPage")
-    public String listPage(Model model) {
-        return "listPage";
     }
 }
