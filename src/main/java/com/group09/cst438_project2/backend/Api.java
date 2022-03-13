@@ -12,10 +12,27 @@ public class Api {
 
     @GetMapping(path = "/allUsers")
     public @ResponseBody Iterable<User> getAllUsers() {
-
         return userRepository.findAll();
     }
 
+    @GetMapping(path = "/findByUsername")
+    public @ResponseBody User getUser(@RequestParam String username) {
+        return userRepository.findDistinctByUsernameLike(username);
+    }
+
+    @PostMapping(path="/addUser")
+    public @ResponseBody String addUser(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String username, @RequestParam String password) {
+        User user = new User();
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setAdmin(false);
+
+        userRepository.save(user);
+
+        return "saved";
+    }
 
 //    @GetMapping(path = "/deleteUser")
 //    public @ResponseBody String deleteUser (@RequestParam String id) {
