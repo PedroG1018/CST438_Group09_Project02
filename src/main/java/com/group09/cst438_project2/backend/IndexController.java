@@ -13,12 +13,43 @@ public class IndexController {
     @Autowired
     Api api;
 
+    @Autowired
+    private UserRepository userRepository;
+
+
     @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("message", "Thank you for visiting.");
 
         return "home";
     }
+
+    @RequestMapping(value = "/loginForm")
+    public String loginForm(Model model){
+        model.addAttribute("user", new User());
+        return "home";
+    }
+
+    @ModelAttribute(value = "loginForm")
+    @PostMapping("/loginForm")
+    public @ResponseBody String loginSubmit(@ModelAttribute User user){
+        User u = userRepository.findDistinctByUsernameLike(user.getUsername());
+        if (u == null){
+            return "Wrong login name";
+        }
+        if(u.getPassword().equals(user.getPassword())){
+            return "Correct password";
+        } else {
+            return "Incorrect password";
+        }
+    }
+
+    @GetMapping(value = "/userIsTaken")
+    public @ResponseBody boolean checkForUser(String username){
+        User u = userRepository.findDistinctByUsernameLike(username);
+        return u != null;
+    }
+
 
     // get request for register user page
     @GetMapping(value="/registerUser")
