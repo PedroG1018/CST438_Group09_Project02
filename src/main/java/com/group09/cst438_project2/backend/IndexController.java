@@ -5,6 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+
 @Controller
 @RequestMapping({"/", "/home"})
 public class IndexController {
@@ -16,32 +20,30 @@ public class IndexController {
     @Autowired
     private UserRepository userRepository;
 
-
-    @GetMapping("/")
-    public String index(Model model) {
-        model.addAttribute("message", "Thank you for visiting.");
-
-        return "home";
-    }
-
-    @RequestMapping(value = "/loginForm")
+    @RequestMapping(value = "/")
     public String loginForm(Model model){
         model.addAttribute("user", new User());
         return "home";
     }
 
-    @ModelAttribute(value = "loginForm")
-    @PostMapping("/loginForm")
-    public @ResponseBody String loginSubmit(@ModelAttribute User user){
-        User u = userRepository.findDistinctByUsernameLike(user.getUsername());
-        if (u == null){
-            return "Wrong login name";
+   // @ModelAttribute(value = "loginForm")
+    @RequestMapping(value = "/loginForm", method = RequestMethod.POST)
+    String loginFormSubmit(@ModelAttribute User user, HttpServletResponse response,
+                 HttpSession session,
+                 Model model,
+                 @RequestParam String username,
+                 @RequestParam String password) throws IOException {
+        User u = userRepository.findDistinctByUsernameLike(username);
+        if(u != null) {
+            if(u.getPassword().equals(user.getPassword())) {
+                session.setAttribute("User", u);
+                //return "addItemPage";
+                response.sendRedirect("/landingPage");
+            }
         }
-        if(u.getPassword().equals(user.getPassword())){
-            return "Correct password";
-        } else {
-            return "Incorrect password";
-        }
+        model.addAttribute("username", username);
+        model.addAttribute("password", password);
+        return "home";
     }
 
     @GetMapping(value = "/userIsTaken")
@@ -100,7 +102,7 @@ public class IndexController {
         return "redirect:items?listId=" + item.getListId() + "&userId=" + item.getUserId();
     }
 
-    @GetMapping("/loginPage")
+    @GetMapping("/logoutPage")
     public String loginPage(Model model) {
         return "logoutPage";
     }
@@ -108,5 +110,10 @@ public class IndexController {
     @GetMapping("/editItemPage")
     public String editItemPage(Model model) {
         return "editItemPage";
+    }
+
+    @GetMapping("/landingPage")
+    public String landingPage(Model model) {
+        return "landingPage";
     }
 }
