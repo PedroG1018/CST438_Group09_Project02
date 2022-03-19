@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * Class: Api.java
  * Last Modified: 03/11/2022
  * Description:
  */
+
 @Controller
 @RequestMapping(path="/api")
 public class Api {
@@ -76,6 +79,11 @@ public class Api {
         return wishListRepository.findWishListsByUserIdLike(userId);
     }
 
+    @GetMapping(path = "/list")
+    public @ResponseBody WishList getWishList(@RequestParam Integer listId) {
+        return wishListRepository.findDistinctByListIdLike(listId);
+    }
+
     // api endpoint to add a new wish list
     @PostMapping(path = "/addList")
     public @ResponseBody String addList(@RequestParam Integer userId, @RequestParam String listName, @RequestParam String description) {
@@ -88,6 +96,17 @@ public class Api {
         wishListRepository.save(wishList);
 
         return "saved";
+    }
+
+    @DeleteMapping(path = "/deleteList")
+    public @ResponseBody String deleteList(@RequestParam Integer listId) {
+        WishList wishList = wishListRepository.findDistinctByListIdLike(listId);
+        Iterable<Item> items = itemRepository.findItemsByListIdLike(listId);
+
+        itemRepository.deleteAll(items);
+        wishListRepository.delete(wishList);
+
+        return "deleted";
     }
 
     // api endpoint to show all items in a specific list
