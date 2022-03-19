@@ -32,6 +32,12 @@ public class User {
         this.isAdmin = isAdmin;
     }
 
+    public User(String username, String password){
+        super();
+        this.username = username;
+        this.password = password;
+    }
+
     public Integer getUserId() {
         return userId;
     }
