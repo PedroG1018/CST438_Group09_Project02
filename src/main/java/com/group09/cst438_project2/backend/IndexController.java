@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 @Controller
 @RequestMapping({"/", "/home"})
@@ -18,6 +19,18 @@ public class IndexController {
         model.addAttribute("message", "Thank you for visiting.");
 
         return "home";
+    }
+
+    @RequestMapping("/allUsers")
+    public String allUsers(Model model) {
+        String uri = BASE_URI + "allUsers";
+        RestTemplate restTemplate = new RestTemplate();
+
+        User[] users = restTemplate.getForObject(uri, User[].class);
+
+        model.addAttribute("users", users);
+
+        return "allUsers";
     }
 
     // get request for register user page
@@ -78,4 +91,6 @@ public class IndexController {
     public String editItemPage(Model model) {
         return "editItemPage";
     }
+
+
 }

@@ -11,18 +11,21 @@
 </head>
 
 <body>
-<nav th:insert="partials/navPartial.html :: nav"> </nav>
+    <nav th:insert="partials/navPartial.html :: nav"> </nav>
 
-<h3> Admin Settings </h3>
+    <h3> Admin Settings </h3>
 
-<br>
+    <br>
 
-<p>
-    Here are your list user!.
-</p>
+    <ul>
+        <th:block th:each="user : ${users}">
+            <li th:utext="${user.firstName + ' ' + user.lastName + ' ' + user.username}">..</li>
+        </th:block>
+    </ul>
 
-<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
-<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
-<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+    <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </body>
 </html>

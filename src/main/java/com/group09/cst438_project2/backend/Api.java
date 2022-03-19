@@ -56,19 +56,10 @@ public class Api {
         return "saved";
     }
 
-    /*
     @GetMapping(path = "/deleteUser")
-    public @ResponseBody String deleteUser (@RequestParam String id) {
-        getAllUsers();
-
-        for(User user: userRepository){
-            if(user.getUserId().toString().equals(id)) {
-                return "Selected User A/C has been deleted!";
-            }
-        }
-        return "Sorry! The selected User A/C is not found in the database!";
+    public @ResponseBody String deleteUser (@RequestParam Integer id) {
+        return userRepository.deleteDistinctByUserId(id).toString();
     }
-    */
 
     // api endpoint to show all of a user's lists
     @GetMapping(path = "/lists")
