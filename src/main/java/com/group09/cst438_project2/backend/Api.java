@@ -4,8 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 /**
  * Class: Api.java
  * Last Modified: 03/11/2022
@@ -116,7 +114,7 @@ public class Api {
     }
 
     // api endpoint to delete all items in a specific list
-    @DeleteMapping(path = "deleteItems")
+    @DeleteMapping(path = "/deleteItems")
     public @ResponseBody String deleteItems(@RequestParam Integer listId) {
         Iterable<Item> items = itemRepository.findItemsByListIdLike(listId);
 
