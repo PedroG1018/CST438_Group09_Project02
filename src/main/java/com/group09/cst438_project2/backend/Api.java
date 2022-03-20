@@ -60,12 +60,13 @@ public class Api {
     }
 
 
-    @GetMapping(path = "/deleteUser")
-    public @ResponseBody String deleteUser (@RequestParam Integer id) {
-        return userRepository.deleteDistinctByUserId(id).toString();
+    @DeleteMapping(path = "/deleteUser")
+    public @ResponseBody String deleteUser (@RequestParam Integer userId) {
+        User user = userRepository.findDistinctByUserIdLike(userId);
 
-//        User user = userRepository.findById(id).get();
+        userRepository.delete(user);
 
+        return "user deleted";
     }
 
 
@@ -94,13 +95,32 @@ public class Api {
         return "saved";
     }
 
+    // api endpoint to delete a specific list
     @DeleteMapping(path = "/deleteList")
     public @ResponseBody String deleteList(@RequestParam Integer listId) {
         WishList wishList = wishListRepository.findDistinctByListIdLike(listId);
+
+        wishListRepository.delete(wishList);
+
+        return "deleted";
+    }
+
+    // api endpoint to delete a specific item
+    @DeleteMapping(path = "/deleteItem")
+    public @ResponseBody String deleteItem(@RequestParam Integer itemId) {
+        Item item = itemRepository.findDistinctByItemIdLike(itemId);
+
+        itemRepository.delete(item);
+
+        return "deleted";
+    }
+
+    // api endpoint to delete all items in a specific list
+    @DeleteMapping(path = "deleteItems")
+    public @ResponseBody String deleteItems(@RequestParam Integer listId) {
         Iterable<Item> items = itemRepository.findItemsByListIdLike(listId);
 
         itemRepository.deleteAll(items);
-        wishListRepository.delete(wishList);
 
         return "deleted";
     }

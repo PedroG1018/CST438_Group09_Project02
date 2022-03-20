@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface ItemRepository extends CrudRepository<Item, Integer> {
     Iterable<Item> findItemsByListIdLike(Integer listId);
-    Item deleteAllByListId(Integer listId);
+    Item findDistinctByItemIdLike(Integer itemId);
 }

@@ -38,7 +38,7 @@ public class IndexController {
             if(u.getPassword().equals(user.getPassword())) {
                 session.setAttribute("User", u);
                 //return "addItemPage";
-                response.sendRedirect("/landingPage");
+                response.sendRedirect("/lists?userId=" + user.getUserId());
             }
         }
         model.addAttribute("username", username);
@@ -46,12 +46,12 @@ public class IndexController {
         return "home";
     }
 
+    /*
     @GetMapping(value = "/userIsTaken")
     public @ResponseBody boolean checkForUser(String username){
         User u = userRepository.findDistinctByUsernameLike(username);
         return u != null;
-    }
-
+    }*/
 
     // get request for register user page
     @GetMapping(value="/registerUser")
@@ -112,8 +112,9 @@ public class IndexController {
         return "editItemPage";
     }
 
+    /*
     @GetMapping("/landingPage")
     public String landingPage(Model model) {
         return "landingPage";
-    }
+    }*/
 }
