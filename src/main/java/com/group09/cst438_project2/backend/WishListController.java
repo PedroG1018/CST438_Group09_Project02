@@ -6,9 +6,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * Class: WishListController.java
+ * Last Modified: 03/20/2022
+ * Description
+ */
 @Controller
 @RequestMapping({"/"})
 public class WishListController {
@@ -19,7 +21,13 @@ public class WishListController {
 
     @RequestMapping("/lists")
     public String allLists(@RequestParam Integer userId, Model model) {
+        String uri = BASE_URI + "findByUserId?userId=" + userId;
+        RestTemplate restTemplate = new RestTemplate();
 
+        User user = restTemplate.getForObject(uri, User.class);
+        Boolean admin = user.getAdmin();
+
+        model.addAttribute("isAdmin", admin);
         return "landingPage";
     }
 

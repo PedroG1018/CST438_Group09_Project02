@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -21,29 +22,42 @@ public class IndexController {
     private UserRepository userRepository;
 
     @RequestMapping(value = "/")
-    public String loginForm(Model model){
+    public String loginForm(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("USER_SESSION");
+        if (user != null) {
+            Integer userId = user.getUserId();
+            return "redirect:/lists?userId=" + userId;
+        }
         model.addAttribute("user", new User());
         return "home";
     }
 
-   // @ModelAttribute(value = "loginForm")
     @RequestMapping(value = "/loginForm", method = RequestMethod.POST)
-    String loginFormSubmit(@ModelAttribute User user, HttpServletResponse response,
-                 HttpSession session,
+    public String loginFormSubmit(@ModelAttribute User user,
+                 HttpServletRequest request,
                  Model model,
                  @RequestParam String username,
-                 @RequestParam String password) throws IOException {
+                 @RequestParam String password) {
+
         User u = userRepository.findDistinctByUsernameLike(username);
-        if(u != null) {
+
+        if (u != null) {
             if(u.getPassword().equals(user.getPassword())) {
-                session.setAttribute("User", u);
-                //return "addItemPage";
-                response.sendRedirect("/lists?userId=" + user.getUserId());
+                request.getSession().setAttribute("USER_SESSION", u);
+                return "redirect:/lists?userId=" + u.getUserId();
             }
         }
+
         model.addAttribute("username", username);
         model.addAttribute("password", password);
+
         return "home";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        request.getSession().invalidate();
+        return "redirect:/";
     }
 
     /*
