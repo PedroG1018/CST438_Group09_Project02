@@ -30,7 +30,7 @@ public class IndexController {
 
         model.addAttribute("users", users);
 
-        return "allUsers";
+        return "adminPage";
     }
 
     // get request for register user page
