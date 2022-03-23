@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -50,6 +51,18 @@ public class IndexController {
         model.addAttribute("password", password);
 
         return "home";
+    }
+
+    @RequestMapping("/allUsers")
+    public String allUsers(Model model) {
+        String uri = BASE_URI + "allUsers";
+        RestTemplate restTemplate = new RestTemplate();
+
+        User[] users = restTemplate.getForObject(uri, User[].class);
+
+        model.addAttribute("users", users);
+
+        return "adminPage";
     }
 
     @GetMapping("/logout")
@@ -118,20 +131,5 @@ public class IndexController {
     public String profilePage(Model model) {
         return "profilePage";
     }
-
-    /*
-    @GetMapping("/logoutPage")
-    public String loginPage(Model model) {
-        return "logoutPage";
-    }
-
-    @GetMapping("/editItemPage")
-    public String editItemPage(Model model) {
-        return "editItemPage";
-    }
-
-    @GetMapping("/landingPage")
-    public String landingPage(Model model) {
-        return "landingPage";
-    }*/
+    
 }
