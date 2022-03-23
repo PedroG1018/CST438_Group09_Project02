@@ -6,9 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
 @Controller
 @RequestMapping({"/", "/home"})
@@ -116,6 +114,12 @@ public class IndexController {
         return "redirect:items?listId=" + item.getListId() + "&userId=" + item.getUserId();
     }
 
+    @GetMapping(value="/profile")
+    public String profilePage(Model model) {
+        return "profilePage";
+    }
+
+    /*
     @GetMapping("/logoutPage")
     public String loginPage(Model model) {
         return "logoutPage";
@@ -126,7 +130,6 @@ public class IndexController {
         return "editItemPage";
     }
 
-    /*
     @GetMapping("/landingPage")
     public String landingPage(Model model) {
         return "landingPage";
