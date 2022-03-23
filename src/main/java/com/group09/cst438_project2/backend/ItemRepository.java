@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface ItemRepository extends CrudRepository<Item, Integer> {
     Iterable<Item> findItemsByListIdLike(Integer listId);
+    Iterable<Item> findItemsByUserIdLike(Integer userId);
     Item findDistinctByItemIdLike(Integer itemId);
 }

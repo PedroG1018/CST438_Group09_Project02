@@ -25,6 +25,18 @@ public class Api {
         return userRepository.findAll();
     }
 
+    // api endpoint to show every user's lists
+    @GetMapping(path = "/allLists")
+    public @ResponseBody Iterable<WishList> getAllWishLists() {
+        return wishListRepository.findAll();
+    }
+
+    // api endpoint to show every user's items
+    @GetMapping(path = "/allItems")
+    public @ResponseBody Iterable<Item> getAllItems() {
+        return itemRepository.findAll();
+    }
+
     // api endpoint t find a user by their unique username
     @GetMapping(path = "/findByUsername")
     public @ResponseBody User getUser(@RequestParam String username) {
@@ -102,6 +114,15 @@ public class Api {
         return "wish list deleted";
     }
 
+    @DeleteMapping(path = "deleteLists")
+    public @ResponseBody String deleteLists(@RequestParam Integer userId) {
+        Iterable<WishList> wishLists = wishListRepository.findWishListsByUserIdLike(userId);
+
+        wishListRepository.deleteAll(wishLists);
+
+        return "wish lists deleted";
+    }
+
     // api endpoint to delete a specific item
     @DeleteMapping(path = "/deleteItem")
     public @ResponseBody String deleteItem(@RequestParam Integer itemId) {
@@ -113,13 +134,22 @@ public class Api {
     }
 
     // api endpoint to delete all items in a specific list
-    @DeleteMapping(path = "/deleteItems")
-    public @ResponseBody String deleteItems(@RequestParam Integer listId) {
+    @DeleteMapping(path = "/deleteListItems")
+    public @ResponseBody String deleteListItems(@RequestParam Integer listId) {
         Iterable<Item> items = itemRepository.findItemsByListIdLike(listId);
 
         itemRepository.deleteAll(items);
 
-        return "items deleted";
+        return "all list items deleted";
+    }
+
+    @DeleteMapping(path = "/deleteAllItems")
+    public @ResponseBody String deleteAllItems(@RequestParam Integer userId) {
+        Iterable<Item> items = itemRepository.findItemsByUserIdLike(userId);
+
+        itemRepository.deleteAll(items);
+
+        return "all user items deleted";
     }
 
     // api endpoint to show all items in a specific list

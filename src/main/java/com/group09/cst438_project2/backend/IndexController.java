@@ -53,7 +53,7 @@ public class IndexController {
         return "home";
     }
 
-    @RequestMapping("/allUsers")
+    @RequestMapping("/admin")
     public String allUsers(Model model) {
         String uri = BASE_URI + "allUsers";
         RestTemplate restTemplate = new RestTemplate();
@@ -128,8 +128,22 @@ public class IndexController {
     }
 
     @GetMapping(value="/profile")
-    public String profilePage(Model model) {
+    public String profilePage(HttpSession session, Model model) {
+        User user = (User) session.getAttribute("USER_SESSION");
+        model.addAttribute("user", user);
+
         return "profilePage";
     }
-    
+
+    @GetMapping(value="/deleteAccount")
+    public String deleteAccount(HttpSession session) {
+        User user = (User) session.getAttribute("USER_SESSION");
+        Integer userId = user.getUserId();
+
+        api.deleteAllItems(userId);
+        api.deleteLists(userId);
+        api.deleteUser(userId);
+
+        return "redirect:/logout";
+    }
 }

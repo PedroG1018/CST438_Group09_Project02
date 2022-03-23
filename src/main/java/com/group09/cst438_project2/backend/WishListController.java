@@ -49,7 +49,7 @@ public class WishListController {
     public String deleteList(@RequestParam Integer listId) {
         Integer userId = api.getWishList(listId).getUserId();
 
-        api.deleteItems(listId);
+        api.deleteListItems(listId);
         api.deleteList(listId);
 
         return "redirect:/lists?userId=" + userId;

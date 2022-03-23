@@ -12,6 +12,14 @@
 <body>
     <nav th:insert="partials/navPartial.html :: nav"> </nav>
 
+    <th:block th:object="${user}">
+        <p th:utext="${user.firstName}"></p>
+    </th:block>
+
+    <form action="#" method="GET" th:action="@{/deleteAccount}" th:object="${user}">
+        <button class="btn btn-danger" type="submit">Delete Account</button>
+    </form>
+
     <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
     <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
     <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
