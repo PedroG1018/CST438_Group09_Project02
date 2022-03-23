@@ -11,11 +11,17 @@
 </head>
 <body>
 
-<nav th:insert="partials/navPartial.html :: nav"> </nav>
+    <nav th:insert="partials/navPartial.html :: nav"> </nav>
 
-<p>
-    Here are your list items.
-</p>
+    <ul>
+        <th:block th:each="item: ${items}">
+            <li th:utext="${'Name: ' + item.itemName + ' Description: ' + item.description + ' URL ' + item.itemURL}">..</li>
+        </th:block>
+    </ul>
+
+    <div id="delete-list">
+        <a th:href="@{/deleteList(listId=${wishList.listId})}" th:object="${wishList}" class="btn-danger ml-2">Delete List</a>
+    </div>
 
 <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>

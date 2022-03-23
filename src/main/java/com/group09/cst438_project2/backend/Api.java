@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * Class: Api.java
  * Last Modified: 03/11/2022
  * Description:
  */
+
 @Controller
 @RequestMapping(path="/api")
 public class Api {
@@ -57,12 +60,13 @@ public class Api {
     }
 
 
-    @GetMapping(path = "/deleteUser")
-    public @ResponseBody String deleteUser (@RequestParam Integer id) {
-        return userRepository.deleteDistinctByUserId(id).toString();
+    @DeleteMapping(path = "/deleteUser")
+    public @ResponseBody String deleteUser (@RequestParam Integer userId) {
+        User user = userRepository.findDistinctByUserIdLike(userId);
 
-//        User user = userRepository.findById(id).get();
+        userRepository.delete(user);
 
+        return "user deleted";
     }
 
 
@@ -70,6 +74,11 @@ public class Api {
     @GetMapping(path = "/lists")
     public @ResponseBody Iterable<WishList> getUserLists(@RequestParam Integer userId) {
         return wishListRepository.findWishListsByUserIdLike(userId);
+    }
+
+    @GetMapping(path = "/list")
+    public @ResponseBody WishList getWishList(@RequestParam Integer listId) {
+        return wishListRepository.findDistinctByListIdLike(listId);
     }
 
     // api endpoint to add a new wish list
@@ -84,6 +93,36 @@ public class Api {
         wishListRepository.save(wishList);
 
         return "saved";
+    }
+
+    // api endpoint to delete a specific list
+    @DeleteMapping(path = "/deleteList")
+    public @ResponseBody String deleteList(@RequestParam Integer listId) {
+        WishList wishList = wishListRepository.findDistinctByListIdLike(listId);
+
+        wishListRepository.delete(wishList);
+
+        return "deleted";
+    }
+
+    // api endpoint to delete a specific item
+    @DeleteMapping(path = "/deleteItem")
+    public @ResponseBody String deleteItem(@RequestParam Integer itemId) {
+        Item item = itemRepository.findDistinctByItemIdLike(itemId);
+
+        itemRepository.delete(item);
+
+        return "deleted";
+    }
+
+    // api endpoint to delete all items in a specific list
+    @DeleteMapping(path = "deleteItems")
+    public @ResponseBody String deleteItems(@RequestParam Integer listId) {
+        Iterable<Item> items = itemRepository.findItemsByListIdLike(listId);
+
+        itemRepository.deleteAll(items);
+
+        return "deleted";
     }
 
     // api endpoint to show all items in a specific list
