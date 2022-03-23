@@ -6,6 +6,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+
 @Controller
 @RequestMapping({"/", "/home"})
 public class IndexController {
@@ -14,9 +19,38 @@ public class IndexController {
     @Autowired
     Api api;
 
-    @GetMapping("/")
-    public String index(Model model) {
-        model.addAttribute("message", "Thank you for visiting.");
+    @Autowired
+    private UserRepository userRepository;
+
+    @RequestMapping(value = "/")
+    public String loginForm(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("USER_SESSION");
+        if (user != null) {
+            Integer userId = user.getUserId();
+            return "redirect:/lists?userId=" + userId;
+        }
+        model.addAttribute("user", new User());
+        return "home";
+    }
+
+    @RequestMapping(value = "/loginForm", method = RequestMethod.POST)
+    public String loginFormSubmit(@ModelAttribute User user,
+                 HttpServletRequest request,
+                 Model model,
+                 @RequestParam String username,
+                 @RequestParam String password) {
+
+        User u = userRepository.findDistinctByUsernameLike(username);
+
+        if (u != null) {
+            if(u.getPassword().equals(user.getPassword())) {
+                request.getSession().setAttribute("USER_SESSION", u);
+                return "redirect:/lists?userId=" + u.getUserId();
+            }
+        }
+
+        model.addAttribute("username", username);
+        model.addAttribute("password", password);
 
         return "home";
     }
@@ -32,6 +66,19 @@ public class IndexController {
 
         return "adminPage";
     }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        request.getSession().invalidate();
+        return "redirect:/";
+    }
+
+    /*
+    @GetMapping(value = "/userIsTaken")
+    public @ResponseBody boolean checkForUser(String username){
+        User u = userRepository.findDistinctByUsernameLike(username);
+        return u != null;
+    }*/
 
     // get request for register user page
     @GetMapping(value="/registerUser")
@@ -82,7 +129,7 @@ public class IndexController {
         return "redirect:items?listId=" + item.getListId() + "&userId=" + item.getUserId();
     }
 
-    @GetMapping("/loginPage")
+    @GetMapping("/logoutPage")
     public String loginPage(Model model) {
         return "logoutPage";
     }
@@ -91,6 +138,10 @@ public class IndexController {
     public String editItemPage(Model model) {
         return "editItemPage";
     }
-
-
+  
+    /*
+    @GetMapping("/landingPage")
+    public String landingPage(Model model) {
+        return "landingPage";
+    }*/
 }

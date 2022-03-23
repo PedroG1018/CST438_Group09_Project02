@@ -1,13 +1,17 @@
 package com.group09.cst438_project2.backend;
 
+import org.springframework.context.annotation.Scope;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 
 @Entity
-public class User {
+@Scope("session")
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer userId;
@@ -30,6 +34,12 @@ public class User {
         this.lastName = lastName;
         this.password = password;
         this.isAdmin = isAdmin;
+    }
+
+    public User(String username, String password){
+        super();
+        this.username = username;
+        this.password = password;
     }
 
     public Integer getUserId() {

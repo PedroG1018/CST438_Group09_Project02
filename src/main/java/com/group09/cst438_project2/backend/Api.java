@@ -53,18 +53,29 @@ public class Api {
 
         userRepository.save(user);
 
-        return "saved";
+        return "user saved";
     }
 
-    @GetMapping(path = "/deleteUser")
-    public @ResponseBody String deleteUser (@RequestParam Integer id) {
-        return userRepository.deleteDistinctByUserId(id).toString();
+    // api endpoint to delete a specific user
+    @DeleteMapping(path = "/deleteUser")
+    public @ResponseBody String deleteUser (@RequestParam Integer userId) {
+        User user = userRepository.findDistinctByUserIdLike(userId);
+
+        userRepository.delete(user);
+
+        return "user deleted";
     }
 
     // api endpoint to show all of a user's lists
     @GetMapping(path = "/lists")
     public @ResponseBody Iterable<WishList> getUserLists(@RequestParam Integer userId) {
         return wishListRepository.findWishListsByUserIdLike(userId);
+    }
+
+    // api endpoint to retrieve a specific wish list
+    @GetMapping(path = "/list")
+    public @ResponseBody WishList getWishList(@RequestParam Integer listId) {
+        return wishListRepository.findDistinctByListIdLike(listId);
     }
 
     // api endpoint to add a new wish list
@@ -78,7 +89,37 @@ public class Api {
 
         wishListRepository.save(wishList);
 
-        return "saved";
+        return "wish list saved";
+    }
+
+    // api endpoint to delete a specific list
+    @DeleteMapping(path = "/deleteList")
+    public @ResponseBody String deleteList(@RequestParam Integer listId) {
+        WishList wishList = wishListRepository.findDistinctByListIdLike(listId);
+
+        wishListRepository.delete(wishList);
+
+        return "wish list deleted";
+    }
+
+    // api endpoint to delete a specific item
+    @DeleteMapping(path = "/deleteItem")
+    public @ResponseBody String deleteItem(@RequestParam Integer itemId) {
+        Item item = itemRepository.findDistinctByItemIdLike(itemId);
+
+        itemRepository.delete(item);
+
+        return "item deleted";
+    }
+
+    // api endpoint to delete all items in a specific list
+    @DeleteMapping(path = "/deleteItems")
+    public @ResponseBody String deleteItems(@RequestParam Integer listId) {
+        Iterable<Item> items = itemRepository.findItemsByListIdLike(listId);
+
+        itemRepository.deleteAll(items);
+
+        return "items deleted";
     }
 
     // api endpoint to show all items in a specific list
@@ -101,6 +142,6 @@ public class Api {
 
         itemRepository.save(item);
 
-        return "saved";
+        return "item saved";
     }
 }
