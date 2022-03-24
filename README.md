@@ -13,15 +13,16 @@ The website allows users to create virtual wishlists where they can add items of
 
 Deployed using Heroku: https://vast-beach-99467.herokuapp.com
 
-### Mockup (not final)
+### Initial Mockup
 
 ![Mock-up Diagram Vers  3](https://user-images.githubusercontent.com/49994182/155939620-2788dec9-93fe-4d69-8729-3775d5cb3978.png)
 
 
-### Entity Relation Diagram (not final)
+### Entity Relation Diagram
 https://lucid.app/lucidchart/ca9cfcba-a0b3-45eb-a2b1-dfd43ef44816/edit?beaconFlowId=3DB69CE89DFC15F2&invitationId=inv_92fc9869-6aa2-434a-b636-67773748482d&page=0_0#
-<img width="1263" alt="Screen Shot 2022-02-27 at 11 07 29 PM" src="https://user-images.githubusercontent.com/49994182/155939687-c46c1ffa-62b2-4fad-938d-665609589ffc.png">
-There's three tables to hold the users, lists, and items in the database. Each have a unique id field that we can use to link them together to ensure that the correct lists and items are tied to the correct users. The 'isAdmin' field in the User table will be used to check that if the current user has admin privileges. The Item table will contain item url's linking the user to listings from official web stores like Amazon as well as image url's so that it's not necessary to store the raw images ourselves.
+![Entity Relation Diagram V2](https://user-images.githubusercontent.com/49994182/159839231-828df07a-fc2a-4701-8805-d52d94028de3.png)
+
+There's three tables to hold the users, lists, and items in the database. Each have a unique id field that we can use to link them together to ensure that the correct lists and items are tied to the correct users. The 'isAdmin' field in the User table will be used to check if the current user has admin privileges. The Item table will contain item url's linking the user to listings from official web stores like Amazon as well as image url's so that it's not necessary to store the raw images locally.
 
 ### Links
 
