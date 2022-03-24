@@ -13,7 +13,15 @@
 
   <nav th:insert="partials/navPartial.html :: nav"></nav>
 
-  <p>Here are your lists.</p>
+  <ul>
+    <th:block th:each="list: ${lists}">
+      <li th:utext="${'Name: ' + list.listName + ' Description: ' + list.description + ' URL ' + list.itemURL}">..</li>
+    </th:block>
+  </ul>
+
+<!--  <div id="delete-list">-->
+<!--    <a th:href="@{/deleteList(listId=${wishList.listId})}" th:object="${wishList}" class="btn-danger ml-2">Delete List</a>-->
+<!--  </div>-->
 
 <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
