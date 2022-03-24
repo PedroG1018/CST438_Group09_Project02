@@ -5,6 +5,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+/**
+ * Class: WishList.java
+ * Last Modified: 03/23/2022
+ * Description: Wish list entity for wish_list table
+ */
 @Entity
 public class WishList {
     @Id

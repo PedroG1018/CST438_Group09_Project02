@@ -8,8 +8,8 @@ import org.springframework.web.client.RestTemplate;
 
 /**
  * Class: WishListController.java
- * Last Modified: 03/20/2022
- * Description
+ * Last Modified: 03/23/2022
+ * Description: Controller class containing various routes related to user's wish lists
  */
 @Controller
 @RequestMapping({"/"})
@@ -19,6 +19,7 @@ public class WishListController {
     @Autowired
     Api api;
 
+    // endpoint for seeing all of the user's wish lists; the landing page after logging in
     @RequestMapping("/lists")
     public String allLists(@RequestParam Integer userId, Model model) {
         String uri = BASE_URI + "findByUserId?userId=" + userId;
@@ -31,6 +32,7 @@ public class WishListController {
         return "landingPage";
     }
 
+    // endpoint for seeing all the items in a wish list
     @GetMapping("/items")
     public String listItems(@RequestParam Integer listId, Model model) {
         String uri = BASE_URI + "items?listId=" + listId;
@@ -42,16 +44,19 @@ public class WishListController {
         model.addAttribute("items", items);
         model.addAttribute("wishList", wishList);
 
-        return "listPage";
+        return "listItemsPage";
     }
 
+    // endpoint for deleting a wish list
     @GetMapping("/deleteList")
     public String deleteList(@RequestParam Integer listId) {
         Integer userId = api.getWishList(listId).getUserId();
 
+        // deletes wish list and items within that wish list
         api.deleteListItems(listId);
         api.deleteList(listId);
 
+        // redirect to all the user's wish lists
         return "redirect:/lists?userId=" + userId;
     }
 }

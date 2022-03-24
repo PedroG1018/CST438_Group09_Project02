@@ -6,8 +6,9 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * Class: Api.java
- * Last Modified: 03/11/2022
- * Description:
+ * Last Modified: 03/23/2022
+ * Description: API endoints for accessing the tables and values in our database.
+ *              Can be used as routes on the app or via Postman
  */
 @Controller
 @RequestMapping(path="/api")
@@ -104,7 +105,7 @@ public class Api {
         return "wish list saved";
     }
 
-    // api endpoint to delete a specific list
+    // api endpoint to delete a specific wish list
     @DeleteMapping(path = "/deleteList")
     public @ResponseBody String deleteList(@RequestParam Integer listId) {
         WishList wishList = wishListRepository.findDistinctByListIdLike(listId);
@@ -114,6 +115,7 @@ public class Api {
         return "wish list deleted";
     }
 
+    // api endpoint to delete all of a user's wish lists
     @DeleteMapping(path = "deleteLists")
     public @ResponseBody String deleteLists(@RequestParam Integer userId) {
         Iterable<WishList> wishLists = wishListRepository.findWishListsByUserIdLike(userId);
@@ -143,6 +145,7 @@ public class Api {
         return "all list items deleted";
     }
 
+    // api endpoint to delete all of a user's items
     @DeleteMapping(path = "/deleteAllItems")
     public @ResponseBody String deleteAllItems(@RequestParam Integer userId) {
         Iterable<Item> items = itemRepository.findItemsByUserIdLike(userId);
