@@ -5,13 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import org.thymeleaf.util.ArrayUtils;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Class: IndexController.java
@@ -97,7 +92,10 @@ public class IndexController {
         RestTemplate restTemplate = new RestTemplate();
 
         User[] users = restTemplate.getForObject(uri, User[].class);
+        User user = (User) session.getAttribute("USER_SESSION");
+        Boolean admin = user.getAdmin();
 
+        model.addAttribute("isAdmin", admin);
         model.addAttribute("users", users);
 
         return "adminPage";
@@ -112,6 +110,41 @@ public class IndexController {
         // destroy user session, redirect to home/login form
         request.getSession().invalidate();
         return "redirect:/";
+    }
+
+    // endpoint for add user form, admin only
+    @GetMapping(value="/admin/addUser")
+    public String addUserForm(HttpSession session, Model model) {
+        if (validateSession(session)) {
+            return "redirect:/";
+        }
+        if (!validateAdmin(session)) {
+            User user = (User) session.getAttribute("USER_SESSION");
+            Integer userId = user.getUserId();
+
+            return "redirect:/lists?userId=" + userId;
+        }
+        User user = (User) session.getAttribute("USER_SESSION");
+        Boolean admin = user.getAdmin();
+
+        model.addAttribute("isAdmin", admin);
+        model.addAttribute("user", new User());
+        return "addUserPage";
+    }
+
+    // post request for adding a new user account, admin only
+    @PostMapping(value="/admin/addUser")
+    public String addUserSubmit(@ModelAttribute User user, Model model) {
+        User u = api.getUser(user.getUsername());
+
+        if (u != null) {
+            model.addAttribute("usernameTaken", true);
+            return "addUserPage";
+        }
+
+        api.addUser(user.getFirstName(), user.getLastName(), user.getUsername(), user.getPassword());
+
+        return "redirect:/admin";
     }
 
     // endpoint for register page
@@ -147,7 +180,9 @@ public class IndexController {
         // userId and listId already initialized
         User user = (User) session.getAttribute("USER_SESSION");
         Integer userId = user.getUserId();
+        Boolean admin = user.getAdmin();
 
+        model.addAttribute("isAdmin", admin);
         model.addAttribute("item", new Item(userId, listId, "", "", "", ""));
 
         return "addItemPage";
@@ -175,6 +210,9 @@ public class IndexController {
             return "redirect:/";
         }
         User user = (User) session.getAttribute("USER_SESSION");
+        Boolean admin = user.getAdmin();
+
+        model.addAttribute("isAdmin", admin);
         model.addAttribute("user", user);
 
         return "profilePage";
