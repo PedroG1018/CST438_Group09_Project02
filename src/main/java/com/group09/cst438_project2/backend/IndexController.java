@@ -5,9 +5,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.thymeleaf.util.ArrayUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Class: IndexController.java
@@ -17,13 +21,23 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping({"/", "/home"})
 public class IndexController {
-    public static String BASE_URI = "http://localhost:8080/api/";
+    public static String BASE_URI = "http://vast-beach-99467.herokuapp.com/api/";
 
     @Autowired
     Api api;
 
     @Autowired
     private UserRepository userRepository;
+
+    private boolean validateSession(HttpSession session) {
+        User user = (User) session.getAttribute("USER_SESSION");
+        return user == null;
+    }
+
+    private boolean validateAdmin(HttpSession session) {
+        User user = (User) session.getAttribute("USER_SESSION");
+        return user.getAdmin();
+    }
 
     // home/login endpoint for logging in; first thing you see when going to the website
     @RequestMapping(value = "/")
@@ -68,7 +82,16 @@ public class IndexController {
 
     // admin endpoint for admin only page
     @RequestMapping("/admin")
-    public String allUsers(Model model) {
+    public String allUsers(HttpSession session, Model model) {
+        if (validateSession(session)) {
+            return "redirect:/";
+        }
+        if (!validateAdmin(session)) {
+            User user = (User) session.getAttribute("USER_SESSION");
+            Integer userId = user.getUserId();
+
+            return "redirect:/lists?userId=" + userId;
+        }
         // admin page displays all registered users
         String uri = BASE_URI + "allUsers";
         RestTemplate restTemplate = new RestTemplate();
@@ -82,7 +105,10 @@ public class IndexController {
 
     // endpoint for logging out the user
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request) {
+    public String logout(HttpSession session, HttpServletRequest request) {
+        if (validateSession(session)) {
+            return "redirect:/";
+        }
         // destroy user session, redirect to home/login form
         request.getSession().invalidate();
         return "redirect:/";
@@ -113,9 +139,15 @@ public class IndexController {
 
     // endpoint for adding an item to a wish list
     @GetMapping(value="/addItem")
-    public String addItemForm(@RequestParam Integer listId, @RequestParam Integer userId, Model model) {
+    public String addItemForm(@RequestParam Integer listId, HttpSession session, Model model) {
+        if (validateSession(session)) {
+            return "redirect:/";
+        }
         // adding empty item object and id values for thymeleaf to use when submitting post request form
         // userId and listId already initialized
+        User user = (User) session.getAttribute("USER_SESSION");
+        Integer userId = user.getUserId();
+
         model.addAttribute("item", new Item(userId, listId, "", "", "", ""));
 
         return "addItemPage";
@@ -133,12 +165,15 @@ public class IndexController {
         api.addItem(item.getListId(), item.getUserId(), item.getItemName(), item.getItemURL(), item.getImgURL(), item.getDescription());
 
         // return to items page
-        return "redirect:items?listId=" + item.getListId() + "&userId=" + item.getUserId();
+        return "redirect:items?listId=" + item.getListId();
     }
 
     // endpoint for the user's profile page
     @GetMapping(value="/profile")
     public String profilePage(HttpSession session, Model model) {
+        if (validateSession(session)) {
+            return "redirect:/";
+        }
         User user = (User) session.getAttribute("USER_SESSION");
         model.addAttribute("user", user);
 
@@ -146,7 +181,7 @@ public class IndexController {
     }
 
     // endpoint for deleting the user's account
-    @GetMapping(value="/deleteAccount")
+    @PostMapping(value="/deleteAccount")
     public String deleteAccount(HttpSession session) {
         User user = (User) session.getAttribute("USER_SESSION");
         Integer userId = user.getUserId();

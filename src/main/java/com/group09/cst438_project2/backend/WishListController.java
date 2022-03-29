@@ -6,6 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpSession;
+
 /**
  * Class: WishListController.java
  * Last Modified: 03/23/2022
@@ -14,14 +16,22 @@ import org.springframework.web.client.RestTemplate;
 @Controller
 @RequestMapping({"/"})
 public class WishListController {
-    public static String BASE_URI = "http://localhost:8080/api/";
+    public static String BASE_URI = "http://vast-beach-99467.herokuapp.com/api/";
 
     @Autowired
     Api api;
 
+    private boolean validateSession(HttpSession session) {
+        User user = (User) session.getAttribute("USER_SESSION");
+        return user == null;
+    }
+
     // endpoint for seeing all of the user's wish lists; the landing page after logging in
     @RequestMapping("/lists")
-    public String allLists(@RequestParam Integer userId, Model model) {
+    public String allLists(@RequestParam Integer userId, HttpSession session, Model model) {
+        if (validateSession(session)) {
+            return "redirect:/";
+        }
         String uri = BASE_URI + "findByUserId?userId=" + userId;
         RestTemplate restTemplate = new RestTemplate();
 
@@ -34,7 +44,11 @@ public class WishListController {
 
     // endpoint for seeing all the items in a wish list
     @GetMapping("/items")
-    public String listItems(@RequestParam Integer listId, Model model) {
+    public String listItems(@RequestParam Integer listId, HttpSession session, Model model) {
+        if (validateSession(session)) {
+            return "redirect:/";
+        }
+
         String uri = BASE_URI + "items?listId=" + listId;
         RestTemplate restTemplate = new RestTemplate();
 
