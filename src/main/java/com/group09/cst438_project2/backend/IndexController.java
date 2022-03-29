@@ -21,7 +21,7 @@ import java.util.List;
 @Controller
 @RequestMapping({"/", "/home"})
 public class IndexController {
-    public static String BASE_URI = "http://vast-beach-99467.herokuapp.com/api/";
+    public static String BASE_URI = "http://localhost:8080/api/";
 
     @Autowired
     Api api;
