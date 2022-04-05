@@ -8,7 +8,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
 
-
+/**
+ * Class: User.java
+ * Last Modified: 03/23/2022
+ * Description: User entity for user database table
+ */
 @Entity
 @Scope("session")
 public class User implements Serializable {

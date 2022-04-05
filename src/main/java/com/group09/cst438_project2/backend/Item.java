@@ -5,6 +5,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+/**
+ * Class: Item.java
+ * Last Modified: 03/23/2022
+ * Description: Item entity for item database table
+ */
 @Entity
 public class Item {
     @Id

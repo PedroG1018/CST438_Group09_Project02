@@ -6,10 +6,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpSession;
+
 /**
  * Class: WishListController.java
- * Last Modified: 03/20/2022
- * Description
+ * Last Modified: 03/23/2022
+ * Description: Controller class containing various routes related to user's wish lists
  */
 @Controller
 @RequestMapping({"/"})
@@ -19,8 +21,17 @@ public class WishListController {
     @Autowired
     Api api;
 
+    private boolean validateSession(HttpSession session) {
+        User user = (User) session.getAttribute("USER_SESSION");
+        return user == null;
+    }
+
+    // endpoint for seeing all of the user's wish lists; the landing page after logging in
     @RequestMapping("/lists")
-    public String allLists(@RequestParam Integer userId, Model model) {
+    public String allLists(@RequestParam Integer userId, HttpSession session, Model model) {
+        if (validateSession(session)) {
+            return "redirect:/";
+        }
         String uri = BASE_URI + "findByUserId?userId=" + userId;
         RestTemplate restTemplate = new RestTemplate();
 
@@ -31,8 +42,13 @@ public class WishListController {
         return "landingPage";
     }
 
+    // endpoint for seeing all the items in a wish list
     @GetMapping("/items")
-    public String listItems(@RequestParam Integer listId, Model model) {
+    public String listItems(@RequestParam Integer listId, HttpSession session, Model model) {
+        if (validateSession(session)) {
+            return "redirect:/";
+        }
+
         String uri = BASE_URI + "items?listId=" + listId;
         RestTemplate restTemplate = new RestTemplate();
 
@@ -42,16 +58,19 @@ public class WishListController {
         model.addAttribute("items", items);
         model.addAttribute("wishList", wishList);
 
-        return "listPage";
+        return "listItemsPage";
     }
 
+    // endpoint for deleting a wish list
     @GetMapping("/deleteList")
     public String deleteList(@RequestParam Integer listId) {
         Integer userId = api.getWishList(listId).getUserId();
 
-        api.deleteItems(listId);
+        // deletes wish list and items within that wish list
+        api.deleteListItems(listId);
         api.deleteList(listId);
 
+        // redirect to all the user's wish lists
         return "redirect:/lists?userId=" + userId;
     }
 }
