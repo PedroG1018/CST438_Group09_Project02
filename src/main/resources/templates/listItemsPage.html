@@ -16,6 +16,7 @@
     <ul>
         <th:block th:each="item: ${items}">
             <li th:utext="${'Name: ' + item.itemName + ' Description: ' + item.description + ' URL ' + item.itemURL}">..</li>
+            <a th:href="@{/editItem(listId=${item.itemId})}" th:object="${item}" class="btn btn-danger">Edit List</a>
         </th:block>
     </ul>
 

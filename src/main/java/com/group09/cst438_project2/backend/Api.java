@@ -177,4 +177,22 @@ public class Api {
 
         return "item saved";
     }
+
+    // api endpoint to find a user by their unique id
+    @GetMapping(path = "/findByItemId")
+    public @ResponseBody Item getItem(@RequestParam Integer itemId) {
+        if (itemRepository.findById(itemId).isPresent()) {
+            return itemRepository.findById(itemId).get();
+        } else {
+            return new Item();
+        }
+    }
+
+    @PostMapping(path = "/updateItem")
+    public @ResponseBody String addItem(@RequestParam Item item) {
+
+        itemRepository.save(item);
+
+        return "item saved";
+    }
 }
