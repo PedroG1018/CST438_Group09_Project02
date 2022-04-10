@@ -170,6 +170,36 @@ public class IndexController {
         return "redirect:/";
     }
 
+    // endpoint for adding a wish list to a user
+    @GetMapping(value="/addWishList")
+    public String addWishListForm(@RequestParam Integer userId, HttpSession session, Model model) {
+        if (validateSession(session)) {
+            return "redirect:/";
+        }
+        // adding empty item object and id values for thymeleaf to use when submitting post request form
+        // userId and listId already initialized
+        User user = (User) session.getAttribute("USER_SESSION");
+
+        model.addAttribute("wishList", new WishList(userId, "", ""));
+
+        return "addWishListPage";
+    }
+
+    // add wish list post request
+    @PostMapping(value="/addWishList")
+    public String addWishListSubmit(@ModelAttribute WishList wishList, Model model) {
+        // check that wishlist name field is filled out
+        if (wishList.getListName() == null || wishList.getListName().equals("")) {
+            model.addAttribute("nameFieldEmpty", true);
+            return "addWishListPage";
+        }
+        // otherwise save wishlist to the database
+        api.addList(wishList.getUserId(), wishList.getListName(), wishList.getDescription());
+
+        // return to items page
+        return "redirect:lists?userId=" + wishList.getUserId();
+    }
+
     // endpoint for adding an item to a wish list
     @GetMapping(value="/addItem")
     public String addItemForm(@RequestParam Integer listId, HttpSession session, Model model) {
@@ -231,5 +261,32 @@ public class IndexController {
 
         // redirect to logout endpoint to destroy current session
         return "redirect:/logout";
+    }
+
+    // endpoint for adding an item to a wish list
+    @GetMapping(value="/editItem")
+    public String editItemForm(@RequestParam Integer itemId, HttpSession session, Model model) {
+        if (validateSession(session)) {
+            return "redirect:/";
+        }
+        // adding empty item object and id values for thymeleaf to use when submitting post request form
+        // userId and listId already initialized
+        User user = (User) session.getAttribute("USER_SESSION");
+        Integer userId = user.getUserId();
+        Item item = api.getItem(itemId);
+
+        model.addAttribute("item", item);
+
+        return "editItemPage";
+    }
+
+    // add item post request
+    @PostMapping(value="/editItem")
+    public String editItemSubmit(@ModelAttribute Item item, Model model) {
+        // otherwise save item to the database
+        api.addItem(item.getListId(), item.getUserId(), item.getItemName(), item.getItemURL(), item.getImgURL(), item.getDescription());
+
+        // return to items page
+        return "redirect:items?listId=" + item.getListId();
     }
 }

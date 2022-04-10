@@ -14,6 +14,16 @@
 
   <p>Here are your lists.</p>
 
+  <ul>
+    <th:block th:each="List: ${wishlist}">
+      <p th:utext="${'Name: ' + wishlist.listName + ' Description: ' + wishlist.description}"></p>
+    </th:block>
+  </ul>
+
+  <form action="#" method="POST" th:action="@{/addWishList}" th:object="${wishlist}">
+    <button class="btn btn-primary" type="submit">Add WishList</button>
+  </form>
+
   <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
   <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
   <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
