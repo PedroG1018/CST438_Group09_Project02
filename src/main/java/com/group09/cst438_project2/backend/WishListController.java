@@ -55,6 +55,10 @@ public class WishListController {
         Item[] items = restTemplate.getForObject(uri, Item[].class);
         WishList wishList = api.getWishList(listId);
 
+        User user = (User) session.getAttribute("USER_SESSION");
+        Boolean admin = user.getAdmin();
+
+        model.addAttribute("isAdmin", admin);
         model.addAttribute("items", items);
         model.addAttribute("wishList", wishList);
 
