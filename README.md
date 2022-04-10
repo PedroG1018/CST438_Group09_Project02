@@ -13,6 +13,44 @@ The website allows users to create virtual wishlists where they can add items of
 
 Deployed using Heroku: https://vast-beach-99467.herokuapp.com
 
+Admin Access:
+Username - admin2022
+Password - admin2022
+
+### API Endpoints
+
+GET: /api/allUsers<br>
+GET: /api/allLists<br>
+GET: /api/allItems<br>
+GET: /api/findByUsername?username={username}<br>
+GET: /api/findByUserId?userId={userId}<br>
+GET: /api/list?listId={listId}<br>
+GET: /api/lists?userId={userId}<br>
+GET: /api/items?listId={listId}<br>
+GET: /api/findByItemId?itemId={itemId}<br>
+POST: /api/addUser?firstName={firstName}&lastName={lastName}&username={username}&password={password}<br>
+POST: /api/addList?userId={userId}&listName={listName}&description={description}<br>
+POST: /api/addItem?listId={listId}&userId={userId}&itemName={itemName}&itemURL={itemURL}&imgURL={imgURL}&description={description}<br>
+DELETE: /api/deleteUser?userId={userId}<br>
+DELETE: /api/deleteList?listId={listId}<br>
+DELETE: /api/deleteLists?userId={userId}<br>
+DELETE: /api/deleteItem?itemId={itemId}<br>
+DELETE: /api/deleteListItems?listId={listId}<br>
+DELETE: /api/deleteAllItems?userId={userId}<br>
+
+### Routes
+
+/ or /home                      (Login Page)<br>
+/admin                          (Admin Page)<br>
+/logout                         (Log Out)<br>
+/admin/addUser                  (Add New User Page)<br>
+/register                       (Create Account Page)<br>
+/addItem?listId={listId}        (Add Item Page)<br>
+/profile                        (User Profile Page)<br>
+/lists?userId={userId}          (Lists Page)<br>
+/items?listId={listId}          (List Items Page)<br>
+
+
 ### Initial Mockup
 
 ![Mock-up Diagram Vers  3](https://user-images.githubusercontent.com/49994182/155939620-2788dec9-93fe-4d69-8729-3775d5cb3978.png)
@@ -26,6 +64,6 @@ There's three tables to hold the users, lists, and items in the database. Each h
 
 ### Links
 
-Lines to resources we found useful:
+Links to resources we found useful:
   - Postman API Testing: https://www.youtube.com/watch?v=VywxIQ2ZXw4
   - Connecting Spring Boot with Database on Heroku: https://www.codejava.net/heroku/deploy-spring-boot-app-with-mysql
