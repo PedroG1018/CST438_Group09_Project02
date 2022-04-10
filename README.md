@@ -13,9 +13,9 @@ The website allows users to create virtual wishlists where they can add items of
 
 Deployed using Heroku: https://vast-beach-99467.herokuapp.com
 
-Admin Access:
-Username - admin2022
-Password - admin2022
+Admin Access:<br>
+Username - admin2022<br>
+Password - admin2022<br>
 
 ### API Endpoints
 
